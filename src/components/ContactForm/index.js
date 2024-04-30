@@ -3,7 +3,9 @@ import axios from 'axios';
 
 function EmailForm() {
   const [emails, setEmails] = useState('');
+  const [names, setNames] = useState('');
   const [message, setMessage] = useState('');
+  const [subject, setSubject] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
@@ -12,9 +14,17 @@ function EmailForm() {
     setEmails(event.target.value);
   };
 
+  const handleNamesChange = (event) => {
+    setNames(event.target.value);
+  };
+
   const handleMessageChange = (event) => {
     setMessage(event.target.value);
   };
+  
+  const handleSubjectChange = (event) =>{
+    setSubject(event.target.value);
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -23,7 +33,7 @@ function EmailForm() {
     setSuccess(false);
 
     try {
-      const response = await axios.post('/send-email', { emails, message });
+      const response = await axios.post('/send-email', { emails,names, message , subject });
       console.log(response.data);
       setSuccess(true);
     } catch (error) {
@@ -40,6 +50,18 @@ function EmailForm() {
         <label>
           Enter Email Addresses (comma-separated):
           <input type="text" value={emails} onChange={handleEmailsChange} />
+        </label>
+      </div>
+      <div>
+        <label>
+          Enter Names (comma-separated):
+          <input type="text" value={names} onChange={handleNamesChange} />
+        </label>
+      </div>
+      <div>
+        <label>
+          Subject:
+          <input value={subject} onChange={handleSubjectChange} />
         </label>
       </div>
       <div>

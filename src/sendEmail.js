@@ -10,10 +10,11 @@ app.use(bodyParser.json());
 
 // Route for sending emails
 app.post('/send-email', async (req, res) => {
-  const { emails, message } = req.body;
+  const { emails, names ,message , subject } = req.body;
 
   // Split the emails string into an array of individual emails
   const emailList = emails.split(',').map(email => email.trim());
+  const nameList = names.split(',').map(name => name.trim());
 
   try {
     // Create a transporter object using SMTP transport
@@ -25,18 +26,19 @@ app.post('/send-email', async (req, res) => {
       }
     });
 
-    // Define email options
+      // Define email options
     let mailOptions = {
       from: 'coldleadconnect@gmail.com', // Sender address
       to: emailList, // Array of recipients
-      subject: 'Message from Your Application', // Subject line
-      text: message // Plain text body
+      subject: subject, // Subject line
+      text: message  // Plain text body
     };
 
     // Send email
     await transporter.sendMail(mailOptions);
 
     res.status(200).json({ success: true, message: 'Email sent successfully' });
+    
   } catch (error) {
     console.error('Error occurred:', error);
     res.status(500).json({ success: false, message: 'Error occurred while sending email' });
